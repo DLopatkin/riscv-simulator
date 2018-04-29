@@ -46,7 +46,19 @@ enum Funct3 {
     FUNCT_SRL = 0x5,
     FUNCT_SRA = 0x5,
     FUNCT_OR = 0x6,
-    FUNCT_AND = 0x7
+    FUNCT_AND = 0x7,
+
+    ERROR_FUNCT = 0xf
+};
+
+enum InstructionType {
+    R_TYPE,
+    I_TYPE,
+    S_TYPE,
+    B_TYPE,
+    U_TYPE,
+    J_TYPE,
+    ERR_TYPE
 };
 
 typedef struct {
