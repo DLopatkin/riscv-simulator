@@ -3,4 +3,4 @@ project(riscv_simulator)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(riscv_simulator main.cpp decoder.cpp decoder.h)
+add_executable(riscv_simulator main.cpp decoder.cpp decoder.h opcode.h)
