@@ -8,9 +8,9 @@
 
 #include <cstdint>
 
-class processor {
+class Processor {
 public:
-    static int process(uint32_t code[]);
+    int process(uint32_t code[]);
 };
 
 #endif //RISCV_SIMULATOR_PROCESSOR_H
