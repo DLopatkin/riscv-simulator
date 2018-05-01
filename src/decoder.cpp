@@ -5,7 +5,7 @@
 #include "decoder.h"
 #include "opcode.h"
 
-#define MASK(len) ( 1u << (len) - 1u)
+#define MASK(len) ( (1u << (len)) - 1u)
 #define BITS(src, offset, len) (( (src) >> (len) ) & MASK( (len) ))
 
 #define OPCODE(instr) ( (uint8_t) ( (instr) & MASK(7)) )
