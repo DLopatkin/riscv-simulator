@@ -15,7 +15,9 @@
 int Processor::process(std::string filename) {
 
     Memory mem;
-    ElfReader elfReader(mem.get_data()[0], filename);
+    ElfReader elfReader(mem.get_data(), filename);
+    elfReader.InitElf();
+    elfReader.LoadElf();
 
     Hart hart;
 
