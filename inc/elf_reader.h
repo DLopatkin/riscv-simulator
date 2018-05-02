@@ -15,12 +15,14 @@ private:
     std::string filename;
     int fd;
     Elf *e;
-    uint8_t mem;
+    GElf_Phdr phdr;
+    uint8_t* mem;
     size_t headers_number;
 
 public:
-    ElfReader(uint8_t mem, std::string filename);
+    ElfReader(uint8_t* mem, std::string filename);
     int InitElf();
+    void LoadElf();
 };
 
 #endif //RISCV_SIMULATOR_ELF_READER_H
