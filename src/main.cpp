@@ -1,5 +1,6 @@
 #include <iostream>
-#include "decoder.h"
+#include <opcode.h>
+
 
 int main() {
     std::cout << sizeof(Instruction) << std::endl;

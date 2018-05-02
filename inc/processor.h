@@ -10,7 +10,7 @@
 
 class Processor {
 public:
-    int process(uint32_t code[]);
+    int process(std::string filename);
 };
 
 #endif //RISCV_SIMULATOR_PROCESSOR_H

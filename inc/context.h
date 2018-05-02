@@ -8,14 +8,17 @@
 #include <array>
 #include <cstdint>
 
-typedef std::array<int32_t, 32> Regfile_t;
+typedef std::array<uint32_t, 32> Regfile_t;
 
-class Contex {
+class Hart {
 public:
     Regfile_t regfile;
     uint32_t PC;
 
+    Hart();
 };
+
+
 
 
 #endif //RISCV_SIMULATOR_CONTEX_H
