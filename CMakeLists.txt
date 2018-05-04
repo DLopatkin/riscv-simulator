@@ -30,6 +30,7 @@ find_library (LIBELF_LIBRARIES
 
 include (FindPackageHandleStandardArgs)
 
+find_package(glog 0.3.5 REQUIRED)
 
 # handle the QUIETLY and REQUIRED arguments and set LIBELF_FOUND to TRUE if all listed variables are TRUE
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(LibElf DEFAULT_MSG
@@ -51,4 +52,4 @@ mark_as_advanced(LIBELF_INCLUDE_DIRS LIBELF_LIBRARIES ELF_GETSHDRSTRNDX)
 include_directories(./inc)
 add_executable(riscv_simulator src/main.cpp src/decoder.cpp inc/decoder.h inc/context.h src/context.cpp inc/instr_impl.h src/instr_impl.cpp inc/opcode.h src/processor.cpp inc/processor.h inc/elf_reader.h src/elf_reader.cpp src/memory.cpp inc/memory.h)
 
-target_link_libraries(riscv_simulator ${LIBELF_LIBRARIES})
+target_link_libraries(riscv_simulator ${LIBELF_LIBRARIES} glog::glog)

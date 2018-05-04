@@ -2,6 +2,8 @@
 // Created by harld on 29-Apr-18.
 //
 
+#include <glog/logging.h>
+#include <opcode.h>
 #include "instr_impl.h"
 
 
@@ -137,6 +139,8 @@ void Instr_impl::SW_impl(const Instruction &instr, Hart &hart, Memory &mem) {
 //======================================================================
 void Instr_impl::ADDI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 + IMM;
+    LOG(INFO) << "ADDI: x" << instr.rd << ": " << RD
+              << " = x" << instr.rs1 << ": " << RS1 << " + " << IMM;
 }
 
 void Instr_impl::SLTI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
