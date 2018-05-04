@@ -5,7 +5,9 @@
 
 
 #define MASK(len) ( (1u << (len)) - 1u)
-#define BITS(src, offset, len) (( (src) >> (len) ) & MASK( (len) ))
+#define BITS(src, offset, len) (( (src) >> (offset) ) & MASK( (len) ))
+#define HIGH_BIT(instr) (( (instr) >> 31u ) & 0x1u )
+#define SET_HIGH(bit, offset) ((((bit) << (32u - (offset))) - (bit)) << (offset))
 
 #define OPCODE(instr) ( (uint8_t) ( (instr) & MASK(7)) )
 
@@ -13,21 +15,24 @@
 #define RS1(instr) ((uint8_t) (BITS( (instr), 15u, 5u )))
 #define RS2(instr) ((uint8_t) (BITS( (instr), 20u, 5u )))
 
-#define FUNCT3(instr) ( (uint8_t) (BITS((instr), 12u, 7u )))
+#define FUNCT3(instr) ( (uint8_t) (BITS( (instr), 12u, 3u )))
 #define FUNCT7(instr) ((uint8_t) (BITS( (instr), 25u, 7u )))
 
 #define IMM_U(instr) ( (instr) >> 12u << 12u)
-#define IMM_I(instr) (BITS( (instr), 20u, 12u ))
+#define IMM_I(instr) (BITS( (instr), 20u, 12u ) | SET_HIGH(HIGH_BIT((instr)), 12u))
 #define IMM_S(instr) (BITS( (instr), 7u, 5u ) \
-                     | (BITS( (instr), 25u,7u ) << 5u ))
+                     | (BITS( (instr), 25u,7u ) << 5u ) \
+                     | SET_HIGH(HIGH_BIT((instr)), 12u))
 #define IMM_B(instr) ((BITS( (instr), 8u, 4u) << 1u) \
                      | (BITS( (instr), 25u, 6u) << 5u) \
                      | (BITS( (instr), 7u, 1u) << 11u) \
-                     | (BITS( (instr), 31u, 1u) << 12u))
+                     | (BITS( (instr), 31u, 1u) << 12u) \
+                     | SET_HIGH(HIGH_BIT((instr)), 12u))
 #define IMM_J(instr) ((BITS( (instr), 31u, 1u) << 20u) \
                      | (BITS( (instr), 21u, 10u) << 21u) \
                      | (BITS( (instr), 20u, 1u) << 11u) \
-                     | (BITS( (instr), 12u, 8u) << 12u))
+                     | (BITS( (instr), 12u, 8u) << 12u) \
+                     | SET_HIGH(HIGH_BIT((instr)), 21u))
 
 Instruction Decoder::decode(uint32_t instr) {
     Instruction decoded_result;

@@ -6,7 +6,8 @@
 
 
 Hart::Hart(){
-    this->PC = 0x00;
+    this->PC = 0x10100;
     this->regfile = {0};
+    this->regfile[2] = 0x1000000 - 8;
 }
 

@@ -13,18 +13,17 @@
 
 
 int Processor::process(std::string filename) {
-
-    Memory mem;
-    ElfReader elfReader(mem.get_data(), filename);
+    Memory* mem = new Memory();
+    ElfReader elfReader(mem->get_data(), filename);
     elfReader.InitElf();
     elfReader.LoadElf();
 
     Hart hart;
 
     while(true) {
-        Instruction instr = Decoder::decode(mem.load_word(hart.PC));
+        Instruction instr = Decoder::decode(mem->load_word(hart.PC));
 
-        Instr_impl::execute(instr, hart, mem);
+        Instr_impl::execute(instr, hart, *mem);
 
         if(instr.opcode < JAL || instr.opcode >BGEU)
             hart.PC += 4;
