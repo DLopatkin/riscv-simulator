@@ -45,8 +45,8 @@ void  Instr_impl::AUIPC_impl(const Instruction &instr, Hart &hart, Memory &mem) 
 void Instr_impl::JAL_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     if (RD != x0)
         RD = hart.PC + 4;
-    hart.PC += IMM;
-    LOG(INFO) << "JAL: PC: " << hart.PC << " += " << IMM;
+    hart.PC += (int32_t) IMM;
+    LOG(INFO) << "JAL: PC: " << hart.PC << " += " << (int32_t) IMM;
 }
 
 void Instr_impl::JALR_impl(const Instruction &instr, Hart &hart, Memory &mem) {

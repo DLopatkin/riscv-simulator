@@ -29,7 +29,7 @@
                      | (BITS( (instr), 31u, 1u) << 12u) \
                      | SET_HIGH(HIGH_BIT((instr)), 12u))
 #define IMM_J(instr) ((BITS( (instr), 31u, 1u) << 20u) \
-                     | (BITS( (instr), 21u, 10u) << 21u) \
+                     | (BITS( (instr), 21u, 10u) << 1u) \
                      | (BITS( (instr), 20u, 1u) << 11u) \
                      | (BITS( (instr), 12u, 8u) << 12u) \
                      | SET_HIGH(HIGH_BIT((instr)), 21u))
