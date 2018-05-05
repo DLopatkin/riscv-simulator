@@ -25,7 +25,7 @@ int Processor::process(std::string filename) {
 
         Instr_impl::execute(instr, hart, *mem);
 
-        if(instr.opcode < JAL || instr.opcode >BGEU)
+        if(instr.opcode < JAL || instr.opcode > BGEU)
             hart.PC += 4;
     }
 

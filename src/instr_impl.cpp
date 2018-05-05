@@ -25,6 +25,9 @@ void Instr_impl::LUI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
         return;
     }
     RD = IMM;
+    LOG(INFO) << "LUI: x" << (int) instr.rd << ": " << RD
+              << " = " << IMM;
+
 }
 
 void  Instr_impl::AUIPC_impl(const Instruction &instr, Hart &hart, Memory &mem) {
@@ -32,6 +35,8 @@ void  Instr_impl::AUIPC_impl(const Instruction &instr, Hart &hart, Memory &mem) 
         return;
     }
     RD = IMM + hart.PC;
+    LOG(INFO) << "AUIPC: x" << (int) instr.rd << ": " << RD
+              << " = " << IMM << " + PC: "  << hart.PC;
 }
 
 //======================================================================
@@ -41,6 +46,7 @@ void Instr_impl::JAL_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     if (RD != x0)
         RD = hart.PC + 4;
     hart.PC += IMM;
+    LOG(INFO) << "JAL: PC: " << hart.PC << " += " << IMM;
 }
 
 void Instr_impl::JALR_impl(const Instruction &instr, Hart &hart, Memory &mem) {
@@ -48,36 +54,61 @@ void Instr_impl::JALR_impl(const Instruction &instr, Hart &hart, Memory &mem) {
         RD = hart.PC + 4;
     // todo check
     hart.PC = RS1 + IMM;
+    LOG(INFO) << "JAL: PC: " << hart.PC << " = x" << (int) instr.rs1 << ": + " << IMM;
 }
 
 void Instr_impl::BEQ_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     if (RS1 == RS2)
         hart.PC += IMM;
+    else
+        hart.PC += 4;
+    LOG(INFO) << "BEQ: PC: " << hart.PC << " = (x" << (int) instr.rs1 << ": " << RS1
+              << " == x" << (int) instr.rs2 << ": " << RS2 << ") ? PC + " << IMM << " : PC";
 }
 
 void Instr_impl::BNE_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     if (RS1 != RS2)
         hart.PC += IMM;
+    else
+        hart.PC += 4;
+    LOG(INFO) << "BNE: PC: " << hart.PC << " = (x" << (int) instr.rs1 << ": " << RS1
+              << " != x" << (int) instr.rs2 << ": " << RS2 << ") ? PC + " << IMM << " : PC";
 }
 
 void Instr_impl::BLT_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     if ((int32_t) RS1 < (int32_t) RS2)
         hart.PC += IMM;
+    else
+        hart.PC += 4;
+    LOG(INFO) << "BLT: PC: " << hart.PC << " = (x" << (int) instr.rs1 << ": " << (int32_t) RS1
+              << " < x" << (int) instr.rs2 << ": " << (int32_t) RS2 << ") ? PC + " << IMM << " : PC";
 }
 
 void Instr_impl::BGE_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     if ((int32_t) RS1 >= (int32_t) RS2)
         hart.PC += IMM;
+    else
+        hart.PC += 4;
+    LOG(INFO) << "BGE: PC: " << hart.PC << " = (x" << (int) instr.rs1 << ": " << (int32_t) RS1
+              << " >= x" << (int) instr.rs2 << ": " << (int32_t) RS2 << ") ? PC + " << IMM << " : PC";
 }
 
 void Instr_impl::BLTU_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     if (RS1 < RS2)
         hart.PC += IMM;
+    else
+        hart.PC += 4;
+    LOG(INFO) << "BLTU: PC: " << hart.PC << " = (x" << (int) instr.rs1 << ": " << RS1
+              << " < x" << (int) instr.rs2 << ": " << RS2 << ") ? PC + " << IMM << " : PC";
 }
 
 void Instr_impl::BGEU_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     if (RS1 >= RS2)
         hart.PC += IMM;
+    else
+        hart.PC += 4;
+    LOG(INFO) << "BGEU: PC: " << hart.PC << " = (x" << (int) instr.rs1 << ": " << RS1
+              << " >= x" << (int) instr.rs2 << ": " << RS2 << ") ? PC + " << IMM << " : PC";
 }
 
 
@@ -139,42 +170,58 @@ void Instr_impl::SW_impl(const Instruction &instr, Hart &hart, Memory &mem) {
 //======================================================================
 void Instr_impl::ADDI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 + IMM;
-    LOG(INFO) << "ADDI: x" << instr.rd << ": " << RD
-              << " = x" << instr.rs1 << ": " << RS1 << " + " << IMM;
+    LOG(INFO) << "ADDI: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " + " << (int32_t) IMM;
 }
 
 void Instr_impl::SLTI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = (int32_t)RS1 < (int32_t)IMM ? 1 : 0;
+    LOG(INFO) << "SLTI: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << (int32_t) RS1 << " < " << (int32_t) IMM;
 }
 
 void Instr_impl::SLTIU_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 < IMM ? 1 : 0;
+    LOG(INFO) << "SLTIU: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " < " << IMM;
 }
 
 
 void Instr_impl::XORI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 ^ IMM;
+    LOG(INFO) << "XORI: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " ^ " << IMM;
 }
 
 void Instr_impl::ORI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 | IMM;
+    LOG(INFO) << "ORI: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " | " << IMM;
 }
 
 void Instr_impl::ANDI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 & IMM;
+    LOG(INFO) << "ANDI: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " & " << IMM;
 }
 
 
 void Instr_impl::SLLI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 << instr.rs2;
+    LOG(INFO) << "SLLI: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " << " << (int32_t) IMM;
 }
 
 void Instr_impl::SRLI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 >> instr.rs2;
+    LOG(INFO) << "SRLI: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " >> " << (int32_t) IMM;
 }
 
 void Instr_impl::SRAI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = (int32_t)RS1 >> instr.rs2;
+    LOG(INFO) << "SRAI: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " >> " << (int32_t) IMM;
 }
 
 //======================================================================
@@ -182,43 +229,63 @@ void Instr_impl::SRAI_impl(const Instruction &instr, Hart &hart, Memory &mem) {
 //======================================================================
 void Instr_impl::ADD_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 + RS2;
+    LOG(INFO) << "ADD: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " + x" << (int) instr.rs2 << ": " << RS2;
 }
 
 void Instr_impl::SUB_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 - RS2;
+    LOG(INFO) << "SUB: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " - x" << (int) instr.rs2 << ": " << RS2;
 }
 
 void Instr_impl::SLT_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = (int32_t)RS1 < (int32_t)RS2 ? 1 : 0;
+    LOG(INFO) << "SLT: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << (int32_t) RS1 << " < x" << (int) instr.rs2 << ": " << (int32_t) RS2;
 }
 
 void Instr_impl::SLTU_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 < RS2 ? 1 : 0;
+    LOG(INFO) << "SLTU: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " < x" << (int) instr.rs2 << ": " << RS2;
 }
 
 void Instr_impl::XOR_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 ^ RS2;
+    LOG(INFO) << "XOR: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " ^ x" << (int) instr.rs2 << ": " << RS2;
 }
 
 void Instr_impl::OR_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 | RS2;
+    LOG(INFO) << "OR: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " | x" << (int) instr.rs2 << ": " << RS2;
 }
 
 void Instr_impl::AND_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 & RS2;
+    LOG(INFO) << "AND: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " & x" << (int) instr.rs2 << ": " << RS2;
 }
 
 
 void Instr_impl::SLL_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 << (RS2 & 0x1F);
+    LOG(INFO) << "ADD: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " << x" << (int) instr.rs2 << ": " << (RS2 & 0x1F);
 }
 
 void Instr_impl::SRL_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = RS1 >> (RS2 & 0x1F);
+    LOG(INFO) << "ADD: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << RS1 << " >> x" << (int) instr.rs2 << ": " << (RS2 & 0x1F);
 }
 
 void Instr_impl::SRA_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     RD = (int32_t) RS1 >> (RS2 & 0x1F);
+    LOG(INFO) << "ADD: x" << (int) instr.rd << ": " << RD
+              << " = x" << (int) instr.rs1 << ": " << (int32_t) RS1 << " >> x" << (int) instr.rs2 << ": " << (RS2 & 0x1F);
 }
 
 
