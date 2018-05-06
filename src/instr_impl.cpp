@@ -43,14 +43,16 @@ void  Instr_impl::AUIPC_impl(const Instruction &instr, Hart &hart, Memory &mem) 
 // Control Transfer Instructions
 //======================================================================
 void Instr_impl::JAL_impl(const Instruction &instr, Hart &hart, Memory &mem) {
-    if (RD != x0)
+    if ( instr.rd != x0) {
         RD = hart.PC + 4;
+        LOG(INFO) << "JAL: x" << (int) instr.rd << ": " << RD << " = PC:" << hart.PC << " + 4";
+    }
     hart.PC += (int32_t) IMM;
     LOG(INFO) << "JAL: PC: " << hart.PC << " += " << (int32_t) IMM;
 }
 
 void Instr_impl::JALR_impl(const Instruction &instr, Hart &hart, Memory &mem) {
-    if (RD != x0)
+    if ( instr.rd != x0)
         RD = hart.PC + 4;
     // todo check
     hart.PC = RS1 + IMM;
@@ -122,6 +124,8 @@ void Instr_impl::LB_impl(const Instruction &instr, Hart &hart, Memory &mem) {
         return;
     }
     RD = mem.load_byte(RS1 + IMM);
+    LOG(INFO) << "LB: x" << (int) instr.rd << ": " << RD
+              << " load from (x" << (int) instr.rs1 << ": "<< RS1 <<" + " << (int32_t) IMM << ")";
 }
 
 void Instr_impl::LH_impl(const Instruction &instr, Hart &hart, Memory &mem) {
@@ -129,6 +133,8 @@ void Instr_impl::LH_impl(const Instruction &instr, Hart &hart, Memory &mem) {
         return;
     }
     RD = mem.load_half(RS1 + IMM);
+    LOG(INFO) << "LH: x" << (int) instr.rd << ": " << RD
+              << " load from (x" << (int) instr.rs1 << ": "<< RS1 <<" + " << (int32_t) IMM << ")";
 }
 
 void Instr_impl::LW_impl(const Instruction &instr, Hart &hart, Memory &mem) {
@@ -136,6 +142,8 @@ void Instr_impl::LW_impl(const Instruction &instr, Hart &hart, Memory &mem) {
         return;
     }
     RD = mem.load_word(RS1 + IMM);
+    LOG(INFO) << "LW: x" << (int) instr.rd << ": " << RD
+              << " load from (x" << (int) instr.rs1 << ": "<< RS1 <<" + " << (int32_t) IMM << ")";
 }
 
 void Instr_impl::LBU_impl(const Instruction &instr, Hart &hart, Memory &mem) {
@@ -143,6 +151,8 @@ void Instr_impl::LBU_impl(const Instruction &instr, Hart &hart, Memory &mem) {
         return;
     }
     RD = mem.load_byteu(RS1 + IMM);
+    LOG(INFO) << "LBU: x" << (int) instr.rd << ": " << RD
+              << " load from (x" << (int) instr.rs1 << ": "<< RS1 <<" + " << (int32_t) IMM << ")";
 }
 
 void Instr_impl::LHU_impl(const Instruction &instr, Hart &hart, Memory &mem) {
@@ -150,18 +160,26 @@ void Instr_impl::LHU_impl(const Instruction &instr, Hart &hart, Memory &mem) {
         return;
     }
     RD = mem.load_halfu(RS1 + IMM);
+    LOG(INFO) << "LHU: x" << (int) instr.rd << ": " << RD
+              << " load from (x" << (int) instr.rs1 << ": "<< RS1 <<" + " << (int32_t) IMM << ")";
 }
 
 void Instr_impl::SB_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     mem.store_byte(RS1 + IMM, (uint8_t) (RS2 & 0xFF));
+    LOG(INFO) << "SB: x" << (int) instr.rs2 << ": " << RS2
+              << " store to (x" << (int) instr.rs1 << ": "<< RS1 <<" + " << (int32_t) IMM << ")";
 }
 
 void Instr_impl::SH_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     mem.store_half(RS1 + IMM, (uint16_t) (RS2 & 0xFFFF));
+    LOG(INFO) << "SH: x" << (int) instr.rs2 << ": " << RS2
+              << " store to (x" << (int) instr.rs1 << ": "<< RS1 <<" + " << (int32_t) IMM << ")";
 }
 
 void Instr_impl::SW_impl(const Instruction &instr, Hart &hart, Memory &mem) {
     mem.store_word(RS1 + IMM, RS2);
+    LOG(INFO) << "SW: x" << (int) instr.rs2 << ": " << RS2
+              << " store to (x" << (int) instr.rs1 << ": "<< RS1 <<" + " << (int32_t) IMM << ")";
 }
 
 
