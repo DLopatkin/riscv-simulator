@@ -54,7 +54,7 @@ void Instr_impl::JALR_impl(const Instruction &instr, Hart &hart, Memory &mem) {
         RD = hart.PC + 4;
     // todo check
     hart.PC = RS1 + IMM;
-    LOG(INFO) << "JAL: PC: " << hart.PC << " = x" << (int) instr.rs1 << ": + " << IMM;
+    LOG(INFO) << "JAL: PC: " << hart.PC << " = x" << (int) instr.rs1 << ": "<< RS1 <<" + " << IMM;
 }
 
 void Instr_impl::BEQ_impl(const Instruction &instr, Hart &hart, Memory &mem) {
