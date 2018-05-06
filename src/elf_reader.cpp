@@ -36,6 +36,11 @@ int ElfReader::InitElf() {
         return EXIT_FAILURE;
     }
 
+    if ( gelf_getehdr(e, &ehdr) == NULL  ) {
+        std::cerr << " gelf_getehdr() failed: " << std::endl;
+        return EXIT_FAILURE;
+    }
+
     if ( gelf_getclass(e) != ELFCLASS32  ) {
         std::cerr << " Wrong ELF class: " << std::endl;
         return EXIT_FAILURE;
@@ -61,4 +66,13 @@ void ElfReader::LoadElf() {
             lseek(fd, offset, SEEK_SET);
         }
     }
+}
+
+ElfReader::~ElfReader() {
+    elf_end(e);
+    close(fd);
+}
+
+uint32_t ElfReader::GetPC() {
+    return ehdr.e_entry;
 }

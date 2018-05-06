@@ -7,9 +7,8 @@
 #include "processor.h"
 #include "context.h"
 #include <vector>
-#include <elf_reader.h>
-#include <memory.h>
-#include <opcode.h>
+#include "elf_reader.h"
+#include "memory.h"
 
 
 int Processor::process(std::string filename) {
@@ -20,7 +19,9 @@ int Processor::process(std::string filename) {
 
     Hart hart;
 
-    while(true) {
+    hart.PC = elfReader.GetPC();
+
+    while(hart.PC != 0) {
         Instruction instr = Decoder::decode(mem->load_word(hart.PC));
 
         Instr_impl::execute(instr, hart, *mem);
@@ -28,6 +29,4 @@ int Processor::process(std::string filename) {
         if(instr.opcode < JAL || instr.opcode > BGEU)
             hart.PC += 4;
     }
-
-
 }

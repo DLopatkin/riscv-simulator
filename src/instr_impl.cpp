@@ -3,7 +3,7 @@
 //
 
 #include <glog/logging.h>
-#include <opcode.h>
+#include "opcode.h"
 #include "instr_impl.h"
 
 
@@ -15,6 +15,7 @@
 constexpr const Instr_impl::instr_impl Instr_impl::instr_map[];
 
 int Instr_impl::execute(const Instruction &instr, Hart &hart, Memory &mem) {
+    LOG(INFO) << "PC: " << std::hex << hart.PC;
     Instr_impl::instr_map[instr.opcode](instr, hart, mem);
     return 0;
 }

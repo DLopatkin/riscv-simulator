@@ -16,11 +16,14 @@ private:
     int fd;
     Elf *e;
     GElf_Phdr phdr;
+    GElf_Ehdr ehdr;
     uint8_t* mem;
     size_t headers_number;
 
 public:
     ElfReader(uint8_t* mem, std::string filename);
+    ~ElfReader();
+    uint32_t GetPC();
     int InitElf();
     void LoadElf();
 };
